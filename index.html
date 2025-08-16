@@ -118,6 +118,15 @@ footer {
 .summary div{
   flex:1 1 200px;
 }
+.reset-button {
+  background-color: #e74c3c;
+  color: white;
+  padding: 5px 8px;
+  margin-left: 10px;
+}
+.reset-button:hover {
+  background-color: #c0392b;
+}
 </style>
 </head>
 <body>
@@ -125,10 +134,10 @@ footer {
 <header>GST Invoice Generator</header>
 
 <main>
-  <!-- Seller Details -->
   <div class="column">
     <label for="sellerName">Seller Name</label>
     <input type="text" id="sellerName">
+    <button class="reset-button" onclick="clearDetails('seller')">Reset Seller</button>
 
     <label for="sellerGST">Seller GSTIN</label>
     <input type="text" id="sellerGST">
@@ -143,10 +152,10 @@ footer {
     <input type="text" id="sellerMobile">
   </div>
 
-  <!-- Buyer Details -->
   <div class="column">
     <label for="buyerName">Buyer Name</label>
     <input type="text" id="buyerName">
+    <button class="reset-button" onclick="clearDetails('buyer')">Reset Buyer</button>
     
     <label for="buyerGST">Buyer GSTIN</label>
     <input type="text" id="buyerGST">
@@ -161,7 +170,6 @@ footer {
     <input type="text" id="buyerMobile">
   </div>
 
-  <!-- Invoice Details -->
   <div class="column">
     <label for="invoiceNo">Invoice No.</label>
     <input type="text" id="invoiceNo">
@@ -178,7 +186,6 @@ footer {
     </select>
   </div>
 
-  <!-- Calculation Table -->
   <div class="column" style="flex-basis:100%;">
     <table id="itemsTable">
       <thead>
@@ -233,7 +240,6 @@ footer {
       <button id="generatePdfBtn" onclick="generatePDF()">Generate PDF</button>
     </div>
 
-    <!-- Invoice Summary -->
     <div class="summary">
       <div>
         <label>Total Invoice Value</label>
@@ -262,7 +268,6 @@ footer {
 
 <footer>Software Developed By: S World The Complete Accounting Solutions, Balaghat. Mobile: 8319601616</footer>
 
-<!-- jsPDF + AutoTable -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
@@ -276,6 +281,55 @@ states.forEach(st=>{
   let o2=new Option(st,st); buyerStateSelect.add(o2);
 });
 document.getElementById('invoiceDate').valueAsDate=new Date();
+
+// === Local Storage Logic ===
+function saveDetails(prefix) {
+  const details = {};
+  document.querySelectorAll(`#${prefix}Name, #${prefix}GST, #${prefix}Address, #${prefix}State, #${prefix}Mobile`).forEach(input => {
+    details[input.id] = input.value;
+  });
+  localStorage.setItem(`${prefix}Details`, JSON.stringify(details));
+}
+
+function loadDetails(prefix) {
+  const saved = localStorage.getItem(`${prefix}Details`);
+  if (saved) {
+    const details = JSON.parse(saved);
+    for (const key in details) {
+      const input = document.getElementById(key);
+      if (input) {
+        input.value = details[key];
+      }
+    }
+  }
+}
+
+function clearDetails(prefix) {
+  localStorage.removeItem(`${prefix}Details`);
+  document.querySelectorAll(`#${prefix}Name, #${prefix}GST, #${prefix}Address, #${prefix}State, #${prefix}Mobile`).forEach(input => {
+    if (input.tagName === 'SELECT') {
+      input.selectedIndex = 0;
+    } else {
+      input.value = '';
+    }
+  });
+}
+
+// Attach event listeners for saving details
+document.querySelectorAll('#sellerName, #sellerGST, #sellerAddress, #sellerState, #sellerMobile').forEach(input => {
+  input.addEventListener('input', () => saveDetails('seller'));
+  input.addEventListener('change', () => saveDetails('seller'));
+});
+document.querySelectorAll('#buyerName, #buyerGST, #buyerAddress, #buyerState, #buyerMobile').forEach(input => {
+  input.addEventListener('input', () => saveDetails('buyer'));
+  input.addEventListener('change', () => saveDetails('buyer'));
+});
+
+// Load details on page load
+window.addEventListener('load', () => {
+  loadDetails('seller');
+  loadDetails('buyer');
+});
 
 // === Add Row ===
 function addItem(){
@@ -487,10 +541,12 @@ function generatePDF(){
   doc.text(amountWords,margin.left,afterGST+6);
 
   // === Authorized Signatory ===
+  const rightAlignX = pageWidth - margin.right;
   doc.setFont('helvetica','bold');
-  doc.text("For "+(document.getElementById("sellerName").value||"Seller"),pageWidth-80,afterGST+20);
+  doc.text("For " + (document.getElementById("sellerName").value || "Seller"), rightAlignX, afterGST + 20, { align: 'right' });
   doc.setFont('helvetica','normal');
-  doc.text("(Authorized Signatory)",pageWidth-65,afterGST+26);
+  doc.text("(Authorized Signatory)", rightAlignX, afterGST + 26, { align: 'right' });
+  
 
   // === Footer fixed ===
   doc.setFontSize(9);
