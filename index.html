@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>GST Invoice Generator</title>
 <style>
 body {
@@ -31,7 +31,7 @@ main {
   gap: 12px;
   width: 100%;
   max-width: 1400px;
-  padding-bottom: 100px; /* ✅ added space so footer doesn't overlap */
+  padding-bottom: 100px;
 }
 .column {
   flex: 1 1 300px;
@@ -125,256 +125,386 @@ footer {
 <header>GST Invoice Generator</header>
 
 <main>
-<!-- Seller Details -->
-<div class="column">
-  <label for="sellerName">Seller Name</label>
-  <input type="text" id="sellerName">
+  <!-- Seller Details -->
+  <div class="column">
+    <label for="sellerName">Seller Name</label>
+    <input type="text" id="sellerName">
 
-  <label for="sellerGST">Seller GSTIN</label>
-  <input type="text" id="sellerGST">
+    <label for="sellerGST">Seller GSTIN</label>
+    <input type="text" id="sellerGST">
 
-  <label for="sellerAddress">Address</label>
-  <input type="text" id="sellerAddress">
+    <label for="sellerAddress">Address</label>
+    <input type="text" id="sellerAddress">
 
-  <label for="sellerState">State</label>
-  <select id="sellerState"></select>
+    <label for="sellerState">State</label>
+    <select id="sellerState"></select>
 
-  <label for="sellerMobile">Mobile No.</label>
-  <input type="text" id="sellerMobile">
-</div>
-
-<!-- Buyer Details -->
-<div class="column">
-  <label for="buyerName">Buyer Name</label>
-  <input type="text" id="buyerName">
-  
-  <label for="buyerGST">Buyer GSTIN</label>
-  <input type="text" id="buyerGST">
-  
-  <label for="buyerAddress">Address</label>
-  <input type="text" id="buyerAddress">
-
-  <label for="buyerState">State</label>
-  <select id="buyerState"></select>
-
-  <label for="buyerMobile">Mobile No.</label>
-  <input type="text" id="buyerMobile">
-</div>
-
-<!-- Invoice Details -->
-<div class="column">
-  <label for="invoiceNo">Invoice No.</label>
-  <input type="text" id="invoiceNo">
-
-  <label for="invoiceDate">Invoice Date</label>
-  <input type="date" id="invoiceDate">
-
-  <label for="paymentType">Payment Type</label>
-  <select id="paymentType">
-    <option value="Cash">Cash</option>
-    <option value="UPI">UPI</option>
-    <option value="Card">Card</option>
-    <option value="Netbanking">Netbanking</option>
-  </select>
-</div>
-
-<!-- Calculation Table -->
-<div class="column" style="flex-basis:100%;">
-  <table id="itemsTable">
-    <thead>
-      <tr>
-        <th>Item Name</th>
-        <th>GST Rate</th>
-        <th>Qty</th>
-        <th>Price (Incl GST)</th>
-        <th>Basic</th>
-        <th>SGST</th>
-        <th>CGST</th>
-        <th>IGST</th>
-        <th>Total</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><input type="text" class="itemName"></td>
-        <td>
-          <select class="gstRate">
-            <option value="0">Nil</option>
-            <option value="5">5%</option>
-            <option value="12">12%</option>
-            <option value="18">18%</option>
-            <option value="28">28%</option>
-          </select>
-        </td>
-        <td><input type="number" class="quantity" value="1" min="1"></td>
-        <td><input type="number" class="price" value="0" min="0"></td>
-        <td class="basic numeric">0</td>
-        <td class="sgst numeric">0</td>
-        <td class="cgst numeric">0</td>
-        <td class="igst numeric">0</td>
-        <td class="total numeric">0</td>
-      </tr>
-    </tbody>
-    <tfoot>
-      <tr style="font-weight:bold;">
-        <td colspan="4">Grand Total</td>
-        <td class="grandBasic numeric">0</td>
-        <td class="grandSGST numeric">0</td>
-        <td class="grandCGST numeric">0</td>
-        <td class="grandIGST numeric">0</td>
-        <td class="grandTotal numeric">0</td>
-      </tr>
-    </tfoot>
-  </table>
-  <div style="margin-top:10px; display:flex; gap:10px;">
-    <button id="addRowBtn" onclick="addItem()">Add Row</button>
-    <button id="recalculateBtn" onclick="calculateInvoice()">Recalculate</button>
-    <button id="generatePdfBtn" onclick="generatePDF()">Generate PDF</button>
+    <label for="sellerMobile">Mobile No.</label>
+    <input type="text" id="sellerMobile">
   </div>
 
-  <!-- Invoice Summary -->
-  <div class="summary">
-    <div>
-      <label>Total Invoice Value</label>
-      <input type="number" id="totalInvoice" readonly>
-    </div>
-    <div>
-      <label>Payment Received</label>
-      <input type="number" id="paymentReceived" placeholder="Amount" oninput="updateBalance()">
-    </div>
-    <div>
-      <label>Balance Amount</label>
-      <input type="number" id="balanceAmount" readonly>
-    </div>
-    <div>
-      <label>Payment Type</label>
-      <select id="paymentTypeSummary">
-        <option value="Cash">Cash</option>
-        <option value="UPI">UPI</option>
-        <option value="Card">Card</option>
-        <option value="Netbanking">Netbanking</option>
-      </select>
-    </div>
+  <!-- Buyer Details -->
+  <div class="column">
+    <label for="buyerName">Buyer Name</label>
+    <input type="text" id="buyerName">
+    
+    <label for="buyerGST">Buyer GSTIN</label>
+    <input type="text" id="buyerGST">
+    
+    <label for="buyerAddress">Address</label>
+    <input type="text" id="buyerAddress">
+
+    <label for="buyerState">State</label>
+    <select id="buyerState"></select>
+
+    <label for="buyerMobile">Mobile No.</label>
+    <input type="text" id="buyerMobile">
   </div>
 
-</div>
+  <!-- Invoice Details -->
+  <div class="column">
+    <label for="invoiceNo">Invoice No.</label>
+    <input type="text" id="invoiceNo">
 
+    <label for="invoiceDate">Invoice Date</label>
+    <input type="date" id="invoiceDate">
+
+    <label for="paymentType">Payment Type</label>
+    <select id="paymentType">
+      <option value="Cash">Cash</option>
+      <option value="UPI">UPI</option>
+      <option value="Card">Card</option>
+      <option value="Netbanking">Netbanking</option>
+    </select>
+  </div>
+
+  <!-- Calculation Table -->
+  <div class="column" style="flex-basis:100%;">
+    <table id="itemsTable">
+      <thead>
+        <tr>
+          <th>Item Name</th>
+          <th>GST Rate</th>
+          <th>Qty</th>
+          <th>Price (Incl GST)</th>
+          <th>Basic</th>
+          <th>SGST</th>
+          <th>CGST</th>
+          <th>IGST</th>
+          <th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="text" class="itemName"></td>
+          <td>
+            <select class="gstRate">
+              <option value="0">Nil</option>
+              <option value="5">5%</option>
+              <option value="12">12%</option>
+              <option value="18">18%</option>
+              <option value="28">28%</option>
+            </select>
+          </td>
+          <td><input type="number" class="quantity" value="1" min="1"></td>
+          <td><input type="number" class="price" value="0" min="0"></td>
+          <td class="basic numeric">0</td>
+          <td class="sgst numeric">0</td>
+          <td class="cgst numeric">0</td>
+          <td class="igst numeric">0</td>
+          <td class="total numeric">0</td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr style="font-weight:bold;">
+          <td colspan="4">Grand Total</td>
+          <td class="grandBasic numeric">0</td>
+          <td class="grandSGST numeric">0</td>
+          <td class="grandCGST numeric">0</td>
+          <td class="grandIGST numeric">0</td>
+          <td class="grandTotal numeric">0</td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div style="margin-top:10px; display:flex; gap:10px;">
+      <button id="addRowBtn" onclick="addItem()">Add Row</button>
+      <button id="recalculateBtn" onclick="calculateInvoice()">Recalculate</button>
+      <button id="generatePdfBtn" onclick="generatePDF()">Generate PDF</button>
+    </div>
+
+    <!-- Invoice Summary -->
+    <div class="summary">
+      <div>
+        <label>Total Invoice Value</label>
+        <input type="number" id="totalInvoice" readonly>
+      </div>
+      <div>
+        <label>Payment Received</label>
+        <input type="number" id="paymentReceived" placeholder="Amount" oninput="updateBalance()">
+      </div>
+      <div>
+        <label>Balance Amount</label>
+        <input type="number" id="balanceAmount" readonly>
+      </div>
+      <div>
+        <label>Payment Type</label>
+        <select id="paymentTypeSummary">
+          <option value="Cash">Cash</option>
+          <option value="UPI">UPI</option>
+          <option value="Card">Card</option>
+          <option value="Netbanking">Netbanking</option>
+        </select>
+      </div>
+    </div>
+  </div>
 </main>
 
 <footer>Software Developed By: S World The Complete Accounting Solutions, Balaghat. Mobile: 8319601616</footer>
 
-<script>
-// Populate Indian states
-const states = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman & Nicobar Islands","Chandigarh","Dadra & Nagar Haveli and Daman & Diu","Delhi","Jammu & Kashmir","Ladakh","Lakshadweep","Puducherry"];
-const sellerStateSelect = document.getElementById('sellerState');
-const buyerStateSelect = document.getElementById('buyerState');
-states.forEach(state=>{
-    const opt1=document.createElement('option'); opt1.value=state; opt1.text=state; sellerStateSelect.add(opt1);
-    const opt2=document.createElement('option'); opt2.value=state; opt2.text=state; buyerStateSelect.add(opt2);
-});
-document.getElementById('invoiceDate').valueAsDate = new Date();
+<!-- jsPDF + AutoTable -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
 
-// Add new item row
+<script>
+// === States ===
+const states = ["Andhra Pradesh","Arunachal Pradesh","Assam","Bihar","Chhattisgarh","Goa","Gujarat","Haryana","Himachal Pradesh","Jharkhand","Karnataka","Kerala","Madhya Pradesh","Maharashtra","Manipur","Meghalaya","Mizoram","Nagaland","Odisha","Punjab","Rajasthan","Sikkim","Tamil Nadu","Telangana","Tripura","Uttar Pradesh","Uttarakhand","West Bengal","Andaman & Nicobar Islands","Chandigarh","Dadra & Nagar Haveli and Daman & Diu","Delhi","Jammu & Kashmir","Ladakh","Lakshadweep","Puducherry"];
+const sellerStateSelect=document.getElementById('sellerState');
+const buyerStateSelect=document.getElementById('buyerState');
+states.forEach(st=>{
+  let o1=new Option(st,st); sellerStateSelect.add(o1);
+  let o2=new Option(st,st); buyerStateSelect.add(o2);
+});
+document.getElementById('invoiceDate').valueAsDate=new Date();
+
+// === Add Row ===
 function addItem(){
-  const table=document.getElementById('itemsTable').getElementsByTagName('tbody')[0];
-  const row=table.insertRow();
+  const table=document.querySelector('#itemsTable tbody');
+  const row=document.createElement('tr');
   row.innerHTML=`
-<td><input type="text" class="itemName"></td>
-<td>
-<select class="gstRate">
-<option value="0">Nil</option>
-<option value="5">5%</option>
-<option value="12">12%</option>
-<option value="18">18%</option>
-<option value="28">28%</option>
-</select>
-</td>
-<td><input type="number" class="quantity" value="1" min="1"></td>
-<td><input type="number" class="price" value="0" min="0"></td>
-<td class="basic numeric">0</td>
-<td class="sgst numeric">0</td>
-<td class="cgst numeric">0</td>
-<td class="igst numeric">0</td>
-<td class="total numeric">0</td>`;
+    <td><input type="text" class="itemName"></td>
+    <td>
+      <select class="gstRate">
+        <option value="0">Nil</option>
+        <option value="5">5%</option>
+        <option value="12">12%</option>
+        <option value="18">18%</option>
+        <option value="28">28%</option>
+      </select>
+    </td>
+    <td><input type="number" class="quantity" value="1" min="1"></td>
+    <td><input type="number" class="price" value="0" min="0"></td>
+    <td class="basic numeric">0</td>
+    <td class="sgst numeric">0</td>
+    <td class="cgst numeric">0</td>
+    <td class="igst numeric">0</td>
+    <td class="total numeric">0</td>`;
+  table.appendChild(row);
   attachEvents();
 }
 
-// Calculation logic
+// === Events ===
 function attachEvents(){
-  const rows=document.querySelectorAll('#itemsTable tbody tr');
-  rows.forEach(row=>{
-    row.querySelectorAll('input, select').forEach(el=>{
-      el.oninput=calculateInvoice;
-      el.onchange=calculateInvoice;
+  document.querySelectorAll('#itemsTable tbody tr').forEach(r=>{
+    r.querySelectorAll('input,select').forEach(e=>{
+      e.oninput=calculateInvoice; e.onchange=calculateInvoice;
     });
   });
 }
 
+// === Calculate ===
 function calculateInvoice(){
   const sellerState=document.getElementById('sellerState').value;
   const buyerState=document.getElementById('buyerState').value;
-  let grandBasic=0, grandSGST=0, grandCGST=0, grandIGST=0, grandTotal=0;
-
-  document.querySelectorAll('#itemsTable tbody tr').forEach(row=>{
-    const qty=parseFloat(row.querySelector('.quantity').value)||0;
-    const price=parseFloat(row.querySelector('.price').value)||0;
-    const gst=parseFloat(row.querySelector('.gstRate').value)||0;
-
-    let basic= price/(1+gst/100);
-    basic = basic * qty;
-
-    let sgst=0, cgst=0, igst=0;
-
+  let gBasic=0,gSGST=0,gCGST=0,gIGST=0,gTotal=0;
+  document.querySelectorAll('#itemsTable tbody tr').forEach(r=>{
+    const qty=parseFloat(r.querySelector('.quantity').value)||0;
+    const price=parseFloat(r.querySelector('.price').value)||0;
+    const gst=parseFloat(r.querySelector('.gstRate').value)||0;
+    let basic=(price/(1+gst/100))*qty;
+    let sgst=0,cgst=0,igst=0;
     if(sellerState && buyerState){
-      if(sellerState===buyerState){
-        sgst = (basic * gst/100) / 2;
-        cgst = (basic * gst/100) / 2;
-        igst = 0;
-      } else {
-        igst = basic * gst/100;
-        sgst = 0;
-        cgst = 0;
-      }
+      if(sellerState===buyerState){ sgst=(basic*gst/100)/2; cgst=sgst; }
+      else{ igst=basic*gst/100; }
     }
-
     let total=basic+sgst+cgst+igst;
-
-    row.querySelector('.basic').innerText=basic.toFixed(2);
-    row.querySelector('.sgst').innerText=sgst.toFixed(2);
-    row.querySelector('.cgst').innerText=cgst.toFixed(2);
-    row.querySelector('.igst').innerText=igst.toFixed(2);
-    row.querySelector('.total').innerText=total.toFixed(2);
-
-    grandBasic+=basic;
-    grandSGST+=sgst;
-    grandCGST+=cgst;
-    grandIGST+=igst;
-    grandTotal+=total;
+    r.querySelector('.basic').innerText=basic.toFixed(2);
+    r.querySelector('.sgst').innerText=sgst.toFixed(2);
+    r.querySelector('.cgst').innerText=cgst.toFixed(2);
+    r.querySelector('.igst').innerText=igst.toFixed(2);
+    r.querySelector('.total').innerText=total.toFixed(2);
+    gBasic+=basic; gSGST+=sgst; gCGST+=cgst; gIGST+=igst; gTotal+=total;
   });
-
-  document.querySelector('.grandBasic').innerText=grandBasic.toFixed(2);
-  document.querySelector('.grandSGST').innerText=grandSGST.toFixed(2);
-  document.querySelector('.grandCGST').innerText=grandCGST.toFixed(2);
-  document.querySelector('.grandIGST').innerText=grandIGST.toFixed(2);
-  document.querySelector('.grandTotal').innerText=grandTotal.toFixed(2);
-
-  document.getElementById('totalInvoice').value=grandTotal.toFixed(2);
+  document.querySelector('.grandBasic').innerText=gBasic.toFixed(2);
+  document.querySelector('.grandSGST').innerText=gSGST.toFixed(2);
+  document.querySelector('.grandCGST').innerText=gCGST.toFixed(2);
+  document.querySelector('.grandIGST').innerText=gIGST.toFixed(2);
+  document.querySelector('.grandTotal').innerText=gTotal.toFixed(2);
+  document.getElementById('totalInvoice').value=gTotal.toFixed(2);
   updateBalance();
 }
 
-// Update balance
+// === Balance ===
 function updateBalance(){
   const total=parseFloat(document.getElementById('totalInvoice').value)||0;
-  const received=parseFloat(document.getElementById('paymentReceived').value)||0;
-  document.getElementById('balanceAmount').value=(total-received).toFixed(2);
+  const rec=parseFloat(document.getElementById('paymentReceived').value)||0;
+  document.getElementById('balanceAmount').value=(total-rec).toFixed(2);
 }
 
-// Generate PDF (placeholder)
-function generatePDF(){ alert("PDF generation logic goes here!"); }
+// === PDF ===
+function generatePDF(){
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF('p','mm','a4');
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = {left:14,right:14,top:15,bottom:18};
+  const n = v=>(parseFloat(v)||0).toFixed(2);
+
+  const taxable = parseFloat(document.querySelector('.grandBasic').innerText)||0;
+  const sgst = parseFloat(document.querySelector('.grandSGST').innerText)||0;
+  const cgst = parseFloat(document.querySelector('.grandCGST').innerText)||0;
+  const igst = parseFloat(document.querySelector('.grandIGST').innerText)||0;
+  const totalGST = sgst+cgst+igst;
+  const gTotal = parseFloat(document.querySelector('.grandTotal').innerText)||0;
+  const paid = parseFloat(document.getElementById('paymentReceived').value)||0;
+  const balance = gTotal-paid;
+
+  // Seller State & Payment Type
+  const sellerState = document.getElementById("sellerState").value || "Seller State";
+  const paymentType = document.getElementById("paymentType") ? document.getElementById("paymentType").value : "N/A";
+
+  // Buyer Name & Invoice No. for filename
+  const buyerName = (document.getElementById("buyerName").value || "Buyer").replace(/\s+/g,'_');
+  const invoiceNo = (document.getElementById("invoiceNo").value || "Invoice");
+
+  // Number to words
+  function inWords(num){
+    const a=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten',
+    'Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+    const b=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+    if((num=num.toString()).length>9) return 'Overflow';
+    const n=('000000000'+num).substr(-9).match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/);
+    if(!n) return; let str='';
+    str+=(n[1]!=0)?(a[Number(n[1])]||b[n[1][0]]+' '+a[n[1][1]])+' Crore ':'';
+    str+=(n[2]!=0)?(a[Number(n[2])]||b[n[2][0]]+' '+a[n[2][1]])+' Lakh ':'';
+    str+=(n[3]!=0)?(a[Number(n[3])]||b[n[3][0]]+' '+a[n[3][1]])+' Thousand ':'';
+    str+=(n[4]!=0)?(a[Number(n[4])]||b[n[4][0]]+' '+a[n[4][1]])+' Hundred ':'';
+    str+=(n[5]!=0)?((str!='')?'and ':'')+(a[Number(n[5])]||b[n[5][0]]+' '+a[n[5][1]])+' ':'';
+    return str.trim()+" Only";
+  }
+  const amountWords = inWords(Math.round(gTotal));
+
+  // === Header ===
+  doc.setFont('helvetica','bold'); doc.setFontSize(14);
+  doc.text("TAX INVOICE", pageWidth/2, margin.top, {align:"center"});
+
+  let y=28;
+  doc.setFontSize(10); doc.setFont('helvetica','bold'); 
+  doc.text("Seller:",margin.left,y); 
+  doc.setFont('helvetica','normal');
+  doc.text(document.getElementById("sellerName").value||"-",margin.left,y+5);
+  doc.text("GSTIN: "+(document.getElementById("sellerGST").value||"-"),margin.left,y+10);
+  doc.text("Address: "+(document.getElementById("sellerAddress").value||"-"),margin.left,y+15);
+  doc.text("State: "+(sellerState||"-"),margin.left,y+20);
+
+  doc.setFont('helvetica','bold'); doc.text("Buyer:",pageWidth/2,y); 
+  doc.setFont('helvetica','normal');
+  doc.text(document.getElementById("buyerName").value||"-",pageWidth/2,y+5);
+  doc.text("GSTIN: "+(document.getElementById("buyerGST").value||"-"),pageWidth/2,y+10);
+  doc.text("Address: "+(document.getElementById("buyerAddress").value||"-"),pageWidth/2,y+15);
+  doc.text("State: "+(document.getElementById("buyerState").value||"-"),pageWidth/2,y+20);
+
+  y+=28;
+  doc.setFont('helvetica','bold');
+  doc.text("Invoice No: "+(invoiceNo||"-"),margin.left,y);
+  doc.text("Date: "+(document.getElementById("invoiceDate").value||"-"),pageWidth/2,y);
+
+  // === Items table ===
+  const body=[]; document.querySelectorAll("#itemsTable tbody tr").forEach(r=>{
+    body.push([
+      r.querySelector(".itemName").value||"-",
+      (r.querySelector(".gstRate").value||"0")+"%",
+      r.querySelector(".quantity").value||"0",
+      r.querySelector(".price").value||"0",
+      r.querySelector(".basic").innerText||"0",
+      r.querySelector(".sgst").innerText||"0",
+      r.querySelector(".cgst").innerText||"0",
+      r.querySelector(".igst").innerText||"0",
+      r.querySelector(".total").innerText||"0"
+    ]);
+  });
+  doc.autoTable({
+    startY:y+6,
+    head:[['Item','GST Rate','Qty','Price (Incl GST)','Basic','SGST','CGST','IGST','Total']],
+    body:body,
+    theme:'grid',
+    styles:{fontSize:9},
+    headStyles:{fillColor:[0,92,153],textColor:255,halign:'center'},
+    bodyStyles:{halign:'right'},
+    columnStyles:{0:{halign:'left'}},
+    margin:{left:margin.left,right:margin.right}
+  });
+
+  // === Notes (Plain, dynamic jurisdiction) ===
+  let gy = doc.lastAutoTable.finalY+8;
+  doc.setFontSize(9); doc.setFont('helvetica','bold');
+  doc.text("Notes:", margin.left, gy);
+  doc.setFont('helvetica','normal');
+  let notesLines = [
+    "- This is a computer-generated invoice. No signature required.",
+    `- Subject to ${sellerState} jurisdiction only.`,
+    "- Thank you for your business!"
+  ];
+  notesLines.forEach((line,i)=> doc.text(line, margin.left, gy+6+(i*6)));
+
+  // === GST Summary (Right Box) ===
+  doc.autoTable({
+    startY: gy,
+    margin:{left:pageWidth/2},
+    tableWidth:(pageWidth/2 - margin.right),
+    head:[["Particulars","Amount"]],
+    body:[
+      ["Total Taxable Value",n(taxable)],
+      ["Total GST",n(totalGST)],
+      [{content:"Grand Total", styles:{fillColor:[255,230,150], fontStyle:'bold'}}, {content:n(gTotal), styles:{fillColor:[255,230,150], fontStyle:'bold'}}],
+      ["Paid Amount",n(paid)],
+      ["Payment Type",paymentType],
+      [{content:"Balance Amount", styles:{textColor:[200,0,0], fontStyle:'bold'}}, {content:n(balance), styles:{textColor:[200,0,0], fontStyle:'bold'}}]
+    ],
+    theme:'grid',
+    styles:{fontSize:9},
+    headStyles:{fillColor:[100,100,255]},
+    columnStyles:{
+      0:{halign:'left'},   // align Particulars LEFT
+      1:{halign:'right'}   // align Amount RIGHT
+    }
+  });
+
+  let afterGST=Math.max(doc.lastAutoTable.finalY, gy+notesLines.length*6+12)+10;
+  doc.setFontSize(10); doc.setFont('helvetica','bold');
+  doc.text("Grand Total (in words):",margin.left,afterGST);
+  doc.setFont('helvetica','normal'); 
+  doc.text(amountWords,margin.left,afterGST+6);
+
+  // === Authorized Signatory ===
+  doc.setFont('helvetica','bold');
+  doc.text("For "+(document.getElementById("sellerName").value||"Seller"),pageWidth-80,afterGST+20);
+  doc.setFont('helvetica','normal');
+  doc.text("(Authorized Signatory)",pageWidth-65,afterGST+26);
+
+  // === Footer fixed ===
+  doc.setFontSize(9);
+  doc.setTextColor(100);
+  doc.text("Software Developed By: S World The Complete Accounting Solutions, Balaghat. Mob: 8319601616", pageWidth/2, pageHeight-6, {align:'center'});
+  doc.setTextColor(0);
+
+  // Save with BuyerName_InvoiceNo.pdf
+  doc.save(`${buyerName}_${invoiceNo}.pdf`);
+}
+
 
 attachEvents();
 calculateInvoice();
 </script>
-
 </body>
 </html>
